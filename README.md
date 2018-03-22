@@ -45,9 +45,15 @@ It appears that the pixels are doubled, making the resolution 32 pixels instead 
 
 # Motor
 
-The BA6620 analog chip "kicks" the motor for a quick start and regulates its speed by using more of less of the 9V supply. This makes the tape move at a constant speed whatever the batteries voltage is (in a reasonable range, say 9~7V).
+The BA6620 analog chip "kicks" the motor for a quick start and regulates its speed by using more of less of the 9V supply. This makes the tape move at a constant speed whatever the battery voltage is (in a reasonable range, say 9~7V).
 
-Since the MCU has no way to know how fast the motor is going, it simply expects it to always be at the same speed and sends lines to the print head at steady intervals.
+Since this printer doesn't do barcodes, they saved on costs and didn't give a way to the MCU to know how fast the motor is going. It simply expects it to always run at the same speed and sends lines to the print head at steady intervals.
+
+# Power
+
+The power button is independent from the keyboard matrix. It shorts a line to ground when pressed and powers up the MCU, which then keeps itself alive via a /powerdown output. It can either go to sleep mode (low power) or kill itself by setting that output low.
+
+@Vikbez tried delaying the motor control signal to avoid wasting 10km of tape each time he needed a label, but surprisingly that made it impossible to turn on the printer. The schematics revealed that the voltage divider used by the MCU to measure battery voltage was only powered when the motor was on (to prevent it from always draining current). When the printer is turned on, the motor is powered during a very shot period, just enough to measure voltage but not enough to make it spin. Since the motor signal was delayed for longer than that period, the voltage divider wasn't being powered during measurment so the MCU thought the batteries were dead: it instantly turned off.
 
 # Display
 
