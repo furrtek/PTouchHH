@@ -28,18 +28,20 @@ That MCU doesn't seem very popular and its dev tools look scary (as most stuff f
 
 Each line's pixels are clocked in a 64-bit shift register, then latched. The strobe signal enables the latch output which turns on the selected heating elements, transfering ink to the label. The heaters are powered with +9V and the driver chip with +5V.
 
-1. +9V
-2. +5V ?
-3. Clock, rising edge, idle high
-4. Data
-5. B.E.O. ?
-6. Latch, active low
-7. NC ?
-8. Strobe
+1. VBAT (+9V)
+2. Clock, rising edge, idle high
+3. Data
+4. VCC (+3.3V)
+5. Latch, active low
+6. GND ?
+7. GND ?
+8. Strobe, active low
 9. GND ?
-10. GND ?
+10. VBAT (+9V)
 
-The E100 uses quite a high clock speed: 1.5MHz. It could go up to 5MHz if the driver is indeed a S4622A. The 64 pixels are loaded in 43us. They're latched shortly after and Strobe goes high for 5ms (heating time).
+Signals are 3.3V.
+
+The E100 uses quite a high clock speed: 1.5MHz. It could go up to 5MHz if the driver is indeed a S4622A. The 64 pixels are loaded in 43us. They're latched shortly after and Strobe goes low for 4.38ms (heating time). One line cycle takes 7.12ms.
 
 It appears that the pixels are doubled, making the resolution 32 pixels instead of 64. Maybe for saving memory, or to extend the whole device's useful lifespan in case some heating elements burn out.
 
